@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Admin Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+
+  <body class="bg-gray-100 min-h-screen">
+    <nav class="bg-white shadow px-6 py-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold text-gray-800">Super Admin Dashboard</h1>
+
+      <div class="flex items-center gap-3">
+        <a
+          href="users.html"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium"
+        >
+          Manage Users
+        </a>
+
+        <a
+          href="projects.html"
+          class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium"
+        >
+          Manage Projects
+        </a>
+
+        <a
+          href="viva.html"
+          class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium"
+        >
+          Viva
+        </a>
+
+        <button
+          onclick="logoutUser()"
+          class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium"
+        >
+          Logout
+        </button>
+      </div>
+    </nav>
+
+    <main class="p-6">
+      <h2 class="text-2xl font-semibold mb-4">Welcome, Super Admin</h2>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="bg-white p-5 rounded-lg shadow">
+          <h3 class="text-gray-500">Total Users</h3>
+          <p id="totalUsers" class="text-3xl font-bold">0</p>
+        </div>
+
+        <div class="bg-white p-5 rounded-lg shadow">
+          <h3 class="text-gray-500">Total Projects</h3>
+          <p id="totalProjects" class="text-3xl font-bold">0</p>
+        </div>
+
+        <div class="bg-white p-5 rounded-lg shadow">
+          <h3 class="text-gray-500">Total Viva</h3>
+          <p id="totalViva" class="text-3xl font-bold">0</p>
+        </div>
+
+        <div class="bg-white p-5 rounded-lg shadow">
+          <h3 class="text-gray-500">Evaluations</h3>
+          <p id="totalEvaluations" class="text-3xl font-bold">0</p>
+        </div>
+
+        <!-- <a
+          href="users.html"
+          class="bg-white p-5 rounded-lg shadow hover:bg-blue-50 block"
+        >
+          <h3 class="text-lg font-bold">Manage Users</h3>
+          <p class="text-gray-500">Create, view and manage users</p>
+        </a> -->
+      </div>
+    </main>
+
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/auth.js"></script>
+
+    <script>
+      checkAuth();
+
+      const role = getUserRole();
+
+      if (role !== "SUPER_ADMIN") {
+        alert("Access denied.");
+        window.location.href = "../login.html";
+      }
+
+      async function loadDashboard() {
+        const data = await apiRequest("/api/dashboard/admin/");
+
+        console.log(data);
+
+        if (data.success) {
+          document.getElementById("totalUsers").textContent =
+            data.total_users || 0;
+          document.getElementById("totalProjects").textContent =
+            data.total_projects || 0;
+          document.getElementById("totalViva").textContent =
+            data.total_viva || 0;
+          document.getElementById("totalEvaluations").textContent =
+            data.total_evaluations || 0;
+        }
+      }
+
+      loadDashboard();
+    </script>
+  </body>
+</html>

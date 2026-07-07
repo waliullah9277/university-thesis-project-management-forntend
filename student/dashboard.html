@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Student Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+
+  <body class="bg-gray-100 min-h-screen">
+    <nav class="bg-white shadow px-6 py-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold">Student Dashboard</h1>
+
+      <button
+        onclick="logoutUser()"
+        class="bg-red-600 text-white px-4 py-2 rounded-lg"
+      >
+        Logout
+      </button>
+    </nav>
+
+    <main class="p-6">
+      <h2 class="text-2xl font-semibold mb-4">Welcome, Student</h2>
+
+      <!-- <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <a href="teams.html" class="bg-white p-5 rounded-lg shadow hover:bg-blue-50">
+        <h3 class="font-bold text-lg">Team</h3>
+        <p class="text-gray-500">Create or view your team</p>
+      </a>
+
+      <a href="projects.html" class="bg-white p-5 rounded-lg shadow hover:bg-blue-50">
+        <h3 class="font-bold text-lg">Project</h3>
+        <p class="text-gray-500">Submit and view project</p>
+      </a>
+
+      <a href="reports.html" class="bg-white p-5 rounded-lg shadow hover:bg-blue-50">
+        <h3 class="font-bold text-lg">Progress Report</h3>
+        <p class="text-gray-500">Submit weekly progress</p>
+      </a>
+    </div> -->
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <a
+          href="teams.html"
+          class="bg-white p-5 rounded-lg shadow hover:bg-blue-50"
+        >
+          <h3 class="font-bold text-lg">Team</h3>
+          <p class="text-gray-500">Create or view your team</p>
+        </a>
+
+        <a
+          href="projects.html"
+          class="bg-white p-5 rounded-lg shadow hover:bg-blue-50"
+        >
+          <h3 class="font-bold text-lg">Project</h3>
+          <p class="text-gray-500">Submit and view project</p>
+        </a>
+
+        <a
+          href="reports.html"
+          class="bg-white p-5 rounded-lg shadow hover:bg-blue-50"
+        >
+          <h3 class="font-bold text-lg">Progress Report</h3>
+          <p class="text-gray-500">Submit weekly progress</p>
+        </a>
+      </div>
+    </main>
+
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/auth.js"></script>
+
+    <script>
+      checkAuth();
+
+      if (getUserRole() !== "STUDENT") {
+        alert("Access denied.");
+        window.location.href = "../login.html";
+      }
+    </script>
+  </body>
+</html>

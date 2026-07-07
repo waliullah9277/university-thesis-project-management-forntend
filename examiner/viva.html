@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Assigned Viva</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+  <nav class="bg-white shadow px-6 py-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold text-gray-800">Assigned Viva</h1>
+
+    <div class="flex items-center gap-3">
+      <a
+        href="dashboard.html"
+        class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium"
+      >
+        Dashboard
+      </a>
+
+      <a
+        href="evaluation.html"
+        class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium"
+      >
+        Evaluation
+      </a>
+
+      <button
+        onclick="logoutUser()"
+        class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium"
+      >
+        Logout
+      </button>
+    </div>
+  </nav>
+
+  <main class="p-6">
+
+    <div class="bg-white p-6 rounded-lg shadow">
+      <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
+        <div>
+          <h2 class="text-2xl font-bold">My Assigned Viva</h2>
+          <p class="text-gray-500">View assigned viva schedules and update viva status</p>
+        </div>
+
+        <button
+          onclick="loadAssignedViva()"
+          class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg"
+        >
+          Refresh
+        </button>
+      </div>
+
+      <div id="vivaList" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <p class="text-gray-500">Loading viva schedules...</p>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/examiner-viva.js"></script>
+
+</body>
+</html>

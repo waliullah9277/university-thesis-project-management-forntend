@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Assigned Projects</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+  <nav class="bg-white shadow px-6 py-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold text-gray-800">Assigned Projects</h1>
+
+    <div class="flex items-center gap-3">
+      <a
+        href="dashboard.html"
+        class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium"
+      >
+        Dashboard
+      </a>
+
+      <a
+        href="reports.html"
+        class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium"
+      >
+        Reports
+      </a>
+
+      <button
+        onclick="logoutUser()"
+        class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium"
+      >
+        Logout
+      </button>
+    </div>
+  </nav>
+
+  <main class="p-6">
+
+    <div class="bg-white p-6 rounded-lg shadow mb-6">
+      <div class="flex justify-between items-center mb-4">
+        <div>
+          <h2 class="text-2xl font-bold">My Assigned Projects</h2>
+          <p class="text-gray-500">View assigned student projects and give feedback</p>
+        </div>
+
+        <button
+          onclick="loadAssignedProjects()"
+          class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg"
+        >
+          Refresh
+        </button>
+      </div>
+
+      <div id="projectList" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <p class="text-gray-500">Loading projects...</p>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- Feedback Modal -->
+  <div
+    id="feedbackModal"
+    class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4"
+  >
+    <div class="bg-white w-full max-w-lg rounded-lg shadow-lg p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold">Give Feedback</h2>
+
+        <button
+          onclick="closeFeedbackModal()"
+          class="text-red-600 font-bold text-xl"
+        >
+          ✕
+        </button>
+      </div>
+
+      <form id="feedbackForm" class="space-y-4">
+        <input type="hidden" id="feedback_project_id" />
+
+        <div>
+          <label class="block text-sm font-medium mb-1">Feedback Comment</label>
+          <textarea
+            id="comment"
+            rows="5"
+            placeholder="Write your feedback..."
+            class="w-full border px-4 py-2 rounded-lg"
+            required
+          ></textarea>
+        </div>
+
+        <button
+          type="submit"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg"
+        >
+          Submit Feedback
+        </button>
+      </form>
+
+      <p id="feedbackMessage" class="mt-4 text-sm"></p>
+
+      <div class="mt-6">
+        <h3 class="text-lg font-bold mb-3">Previous Feedbacks</h3>
+        <div id="feedbackList" class="space-y-3 max-h-60 overflow-y-auto">
+          <p class="text-gray-500">No feedback loaded.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/supervisor-projects.js"></script>
+
+</body>
+</html>

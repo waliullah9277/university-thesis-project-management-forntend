@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Project Management</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="bg-white shadow px-6 py-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold text-gray-800">Project Management</h1>
+
+    <div class="flex items-center gap-3">
+      <a
+        href="dashboard.html"
+        class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium"
+      >
+        Dashboard
+      </a>
+
+      <a
+        href="users.html"
+        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium"
+      >
+        Manage Users
+      </a>
+
+      <button 
+        onclick="logoutUser()"
+        class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium"
+      >
+        Logout
+      </button>
+    </div>
+  </nav>
+
+
+  <main class="p-6">
+
+    <div class="bg-white p-6 rounded-lg shadow">
+      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
+        <div>
+          <h2 class="text-2xl font-bold">All Submitted Projects</h2>
+          <p class="text-gray-500">Assign supervisor and update project status</p>
+        </div>
+
+        <button 
+          onclick="loadProjects()"
+          class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg"
+        >
+          Refresh
+        </button>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr class="bg-gray-200 text-left">
+              <th class="p-3 border">ID</th>
+              <th class="p-3 border">Title</th>
+              <th class="p-3 border">Type</th>
+              <th class="p-3 border">Team</th>
+              <th class="p-3 border">Technology</th>
+              <th class="p-3 border">Supervisor</th>
+              <th class="p-3 border">Status</th>
+              <th class="p-3 border">Assign Supervisor</th>
+              <th class="p-3 border">Update Status</th>
+            </tr>
+          </thead>
+
+          <tbody id="projectTableBody">
+            <tr>
+              <td colspan="9" class="p-4 text-center text-gray-500">
+                Loading projects...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/admin-projects.js"></script>
+
+</body>
+</html>

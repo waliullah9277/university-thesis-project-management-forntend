@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Review Reports</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="bg-white shadow px-6 py-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold text-gray-800">Review Progress Reports</h1>
+
+    <div class="flex items-center gap-3">
+      <a
+        href="dashboard.html"
+        class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium"
+      >
+        Dashboard
+      </a>
+
+      <a
+        href="projects.html"
+        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium"
+      >
+        Assigned Projects
+      </a>
+
+      <button
+        onclick="logoutUser()"
+        class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium"
+      >
+        Logout
+      </button>
+    </div>
+  </nav>
+
+  <main class="p-6">
+
+    <div class="bg-white p-6 rounded-lg shadow">
+      <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4 mb-4">
+        <div>
+          <h2 class="text-2xl font-bold">Student Progress Reports</h2>
+          <p class="text-gray-500">Review progress reports from your assigned projects</p>
+        </div>
+
+        <button
+          onclick="loadSupervisorReports()"
+          class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg"
+        >
+          Refresh
+        </button>
+      </div>
+
+      <div id="reportList" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <p class="text-gray-500">Loading reports...</p>
+      </div>
+    </div>
+
+  </main>
+
+
+  <!-- Review Modal -->
+  <div
+    id="reviewModal"
+    class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4"
+  >
+    <div class="bg-white w-full max-w-lg rounded-lg shadow-lg p-6">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold">Review Report</h2>
+
+        <button
+          onclick="closeReviewModal()"
+          class="text-red-600 font-bold text-xl"
+        >
+          ✕
+        </button>
+      </div>
+
+      <form id="reviewForm" class="space-y-4">
+        <input type="hidden" id="review_report_id" />
+
+        <div>
+          <label class="block text-sm font-medium mb-1">Status</label>
+          <select
+            id="status"
+            class="w-full border px-4 py-2 rounded-lg"
+            required
+          >
+            <option value="">Select Status</option>
+            <option value="REVIEWED">Reviewed</option>
+            <option value="REJECTED">Rejected</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium mb-1">Supervisor Comment</label>
+          <textarea
+            id="supervisor_comment"
+            rows="5"
+            placeholder="Write review comment..."
+            class="w-full border px-4 py-2 rounded-lg"
+            required
+          ></textarea>
+        </div>
+
+        <button
+          type="submit"
+          class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg"
+        >
+          Submit Review
+        </button>
+      </form>
+
+      <p id="reviewMessage" class="mt-4 text-sm"></p>
+    </div>
+  </div>
+
+
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/supervisor-reports.js"></script>
+
+</body>
+</html>

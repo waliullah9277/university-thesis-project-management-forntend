@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Examiner Dashboard</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+  <nav class="bg-white shadow px-6 py-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold text-gray-800">Examiner Dashboard</h1>
+
+    <div class="flex items-center gap-3">
+      <a
+        href="viva.html"
+        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium"
+      >
+        Assigned Viva
+      </a>
+
+      <a
+        href="evaluation.html"
+        class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium"
+      >
+        Evaluation
+      </a>
+
+      <button
+        onclick="logoutUser()"
+        class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium"
+      >
+        Logout
+      </button>
+    </div>
+  </nav>
+
+  <main class="p-6">
+    <h2 class="text-2xl font-bold mb-6">Welcome, Examiner</h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="bg-white p-5 rounded-lg shadow">
+        <h3 class="text-gray-500">Assigned Viva</h3>
+        <p id="assignedViva" class="text-3xl font-bold mt-2">0</p>
+      </div>
+
+      <div class="bg-white p-5 rounded-lg shadow">
+        <h3 class="text-gray-500">Completed Viva</h3>
+        <p id="completedViva" class="text-3xl font-bold mt-2">0</p>
+      </div>
+
+      <div class="bg-white p-5 rounded-lg shadow">
+        <h3 class="text-gray-500">Pending Viva</h3>
+        <p id="pendingViva" class="text-3xl font-bold mt-2">0</p>
+      </div>
+    </div>
+  </main>
+
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/examiner-dashboard.js"></script>
+
+</body>
+</html>

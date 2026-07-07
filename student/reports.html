@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Progress Reports</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- Navbar -->
+  <nav class="bg-white shadow px-6 py-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold text-gray-800">Progress Reports</h1>
+
+    <div class="flex items-center gap-3">
+      <a href="dashboard.html" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg">
+        Dashboard
+      </a>
+
+      <a href="projects.html" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+        Projects
+      </a>
+
+      <a href="teams.html" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg">
+        Teams
+      </a>
+
+      <button 
+        onclick="logoutUser()"
+        class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg"
+      >
+        Logout
+      </button>
+    </div>
+  </nav>
+
+  <main class="p-6">
+
+    <!-- Submit Report -->
+    <div class="bg-white p-6 rounded-lg shadow mb-6">
+      <h2 class="text-2xl font-bold mb-4">Submit Progress Report</h2>
+
+      <form id="reportForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium mb-1">Project</label>
+          <select 
+            id="project"
+            class="w-full border px-4 py-2 rounded-lg"
+            required
+          >
+            <option value="">Loading projects...</option>
+          </select>
+        </div>
+
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium mb-1">Report Title</label>
+          <input 
+            type="text"
+            id="title"
+            placeholder="Week 1 Progress"
+            class="w-full border px-4 py-2 rounded-lg"
+            required
+          />
+        </div>
+
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium mb-1">Description</label>
+          <textarea 
+            id="description"
+            rows="5"
+            placeholder="Completed requirement analysis..."
+            class="w-full border px-4 py-2 rounded-lg"
+            required
+          ></textarea>
+        </div>
+
+        <div class="md:col-span-2">
+          <button 
+            type="submit"
+            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg"
+          >
+            Submit Report
+          </button>
+        </div>
+      </form>
+
+      <p id="message" class="mt-4 text-sm"></p>
+    </div>
+
+
+    <!-- Report List -->
+    <div class="bg-white p-6 rounded-lg shadow">
+      <div class="flex justify-between items-center mb-4">
+        <div>
+          <h2 class="text-2xl font-bold">My Reports</h2>
+          <p class="text-gray-500">Your submitted progress reports</p>
+        </div>
+
+        <button 
+          onclick="loadReports()"
+          class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg"
+        >
+          Refresh
+        </button>
+      </div>
+
+      <div id="reportList" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <p class="text-gray-500">Loading reports...</p>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/student-reports.js"></script>
+
+</body>
+</html>
