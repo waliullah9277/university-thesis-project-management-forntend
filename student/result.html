@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>My Result</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+
+<body class="bg-gray-100 min-h-screen">
+
+  <nav class="bg-white shadow px-6 py-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold text-gray-800">My Result</h1>
+
+    <div class="flex items-center gap-3">
+      <a href="dashboard.html" class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg">Dashboard</a>
+      <a href="projects.html" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">Projects</a>
+      <a href="reports.html" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg">Reports</a>
+
+      <button onclick="logoutUser()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg">
+        Logout
+      </button>
+    </div>
+  </nav>
+
+  <main class="p-6">
+
+    <div class="max-w-3xl mx-auto bg-white p-8 rounded-xl shadow">
+      <div class="flex justify-between items-center mb-6">
+        <div>
+          <h2 class="text-2xl font-bold">University Project Result</h2>
+          <p class="text-gray-500">Published evaluation result</p>
+        </div>
+
+        <button onclick="loadStudentResult()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg">
+          Refresh
+        </button>
+      </div>
+
+      <div id="resultBox">
+        <p class="text-gray-500">Loading result...</p>
+      </div>
+    </div>
+
+  </main>
+
+  <script src="../assets/js/api.js"></script>
+  <script src="../assets/js/auth.js"></script>
+  <script src="../assets/js/student-result.js"></script>
+
+</body>
+</html>
