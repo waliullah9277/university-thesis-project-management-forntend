@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Industrial Training</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+  <body class="bg-gray-100 min-h-screen">
+    <nav class="bg-white shadow px-6 py-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold">Industrial Training</h1>
+
+      <div class="flex gap-3">
+        <a
+          href="dashboard.html"
+          class="bg-gray-600 text-white px-4 py-2 rounded-lg"
+          >Dashboard</a
+        >
+        <button
+          onclick="logoutUser()"
+          class="bg-red-600 text-white px-4 py-2 rounded-lg"
+        >
+          Logout
+        </button>
+      </div>
+    </nav>
+
+    <main class="p-6">
+      <div class="bg-white p-6 rounded-lg shadow mb-6">
+        <h2 class="text-2xl font-bold mb-4">Submit Training Information</h2>
+
+        <form id="trainingForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="md:col-span-2">
+            <label class="block mb-1 text-sm font-medium">Training Title</label>
+            <input
+              id="title"
+              class="w-full border px-4 py-2 rounded-lg"
+              placeholder="Industrial Training at Brain Station 23"
+              required
+            />
+          </div>
+
+          <div>
+            <label class="block mb-1 text-sm font-medium">Company</label>
+            <select
+              id="company"
+              class="w-full border px-4 py-2 rounded-lg"
+              required
+            >
+              <option value="">Loading companies...</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block mb-1 text-sm font-medium">Designation</label>
+            <input
+              id="designation"
+              class="w-full border px-4 py-2 rounded-lg"
+              placeholder="Intern"
+              required
+            />
+          </div>
+
+          <div>
+            <label class="block mb-1 text-sm font-medium">Start Date</label>
+            <input
+              type="date"
+              id="start_date"
+              class="w-full border px-4 py-2 rounded-lg"
+              required
+            />
+          </div>
+
+          <div>
+            <label class="block mb-1 text-sm font-medium">End Date</label>
+            <input
+              type="date"
+              id="end_date"
+              class="w-full border px-4 py-2 rounded-lg"
+              required
+            />
+          </div>
+
+          <div class="md:col-span-2">
+            <label class="block mb-1 text-sm font-medium">Description</label>
+            <textarea
+              id="description"
+              rows="4"
+              class="w-full border px-4 py-2 rounded-lg"
+              required
+            ></textarea>
+          </div>
+
+          <div class="md:col-span-2">
+            <button class="bg-blue-600 text-white px-6 py-2 rounded-lg">
+              Submit Training
+            </button>
+          </div>
+        </form>
+
+        <p id="message" class="mt-4 text-sm"></p>
+      </div>
+
+      <div class="bg-white p-6 rounded-lg shadow">
+        <h2 class="text-2xl font-bold mb-4">My Training</h2>
+        <div id="trainingList" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <p class="text-gray-500">Loading...</p>
+        </div>
+      </div>
+
+      <div
+        id="feedbackModal"
+        class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4"
+      >
+        <div class="bg-white w-full max-w-lg rounded-lg shadow-lg p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold">Training Feedbacks</h2>
+
+            <button
+              onclick="closeFeedbackModal()"
+              class="text-red-600 font-bold text-xl"
+            >
+              ✕
+            </button>
+          </div>
+
+          <div id="feedbackList" class="space-y-3 max-h-96 overflow-y-auto">
+            <p class="text-gray-500">Loading feedbacks...</p>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/student-training.js"></script>
+  </body>
+</html>

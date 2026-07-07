@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Training Supervision</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
+
+  <body class="bg-gray-100 min-h-screen">
+    <nav class="bg-white shadow px-6 py-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold">Training Supervision</h1>
+
+      <div class="flex gap-3">
+        <a
+          href="dashboard.html"
+          class="bg-gray-600 text-white px-4 py-2 rounded-lg"
+          >Dashboard</a
+        >
+        <a
+          href="projects.html"
+          class="bg-blue-600 text-white px-4 py-2 rounded-lg"
+          >Projects</a
+        >
+        <a
+          href="reports.html"
+          class="bg-purple-600 text-white px-4 py-2 rounded-lg"
+          >Reports</a
+        >
+        <button
+          onclick="logoutUser()"
+          class="bg-red-600 text-white px-4 py-2 rounded-lg"
+        >
+          Logout
+        </button>
+      </div>
+    </nav>
+
+    <main class="p-6">
+      <div class="bg-white p-6 rounded-lg shadow">
+        <div class="flex justify-between items-center mb-4">
+          <div>
+            <h2 class="text-2xl font-bold">Assigned Training Students</h2>
+            <p class="text-gray-500">
+              Review industrial training and give feedback
+            </p>
+          </div>
+
+          <button
+            onclick="loadSupervisorTraining()"
+            class="bg-green-600 text-white px-4 py-2 rounded-lg"
+          >
+            Refresh
+          </button>
+        </div>
+
+        <div id="trainingList" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <p class="text-gray-500">Loading...</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Feedback Modal -->
+    <div
+      id="feedbackModal"
+      class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4"
+    >
+      <div class="bg-white w-full max-w-lg rounded-lg shadow-lg p-6">
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-xl font-bold">Training Feedback</h2>
+
+          <button
+            onclick="closeFeedbackModal()"
+            class="text-red-600 font-bold text-xl"
+          >
+            ✕
+          </button>
+        </div>
+
+        <form id="feedbackForm" class="space-y-4">
+          <input type="hidden" id="training_id" />
+
+          <div>
+            <label class="block text-sm font-medium mb-1">Feedback</label>
+            <textarea
+              id="feedback"
+              rows="5"
+              class="w-full border px-4 py-2 rounded-lg"
+              placeholder="Write training feedback..."
+              required
+            ></textarea>
+          </div>
+
+          <button class="bg-blue-600 text-white px-6 py-2 rounded-lg">
+            Submit Feedback
+          </button>
+        </form>
+
+        <p id="message" class="mt-4 text-sm"></p>
+
+        <div class="mt-6">
+          <h3 class="text-lg font-bold mb-3">Previous Feedbacks</h3>
+
+          <div
+            id="previousFeedbackList"
+            class="space-y-3 max-h-60 overflow-y-auto"
+          >
+            <p class="text-gray-500">No feedback loaded.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/supervisor-training.js"></script>
+  </body>
+</html>

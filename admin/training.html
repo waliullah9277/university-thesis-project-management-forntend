@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Training Management</title>
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+<nav class="bg-white shadow px-6 py-4 flex justify-between items-center">
+  <h1 class="text-xl font-bold">Training Management</h1>
+
+  <div class="flex gap-3">
+    <a href="dashboard.html" class="bg-gray-600 text-white px-4 py-2 rounded-lg">Dashboard</a>
+    <button onclick="logoutUser()" class="bg-red-600 text-white px-4 py-2 rounded-lg">Logout</button>
+  </div>
+</nav>
+
+<main class="p-6">
+
+  <div class="bg-white p-6 rounded-lg shadow mb-6">
+    <h2 class="text-2xl font-bold mb-4">Create Company</h2>
+
+    <form id="companyForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <input id="company_name" class="border px-4 py-2 rounded-lg" placeholder="Company Name" required />
+      <input id="address" class="border px-4 py-2 rounded-lg" placeholder="Address" required />
+      <input id="contact_email" type="email" class="border px-4 py-2 rounded-lg" placeholder="Contact Email" />
+      <input id="contact_phone" class="border px-4 py-2 rounded-lg" placeholder="Contact Phone" />
+
+      <button class="bg-blue-600 text-white px-6 py-2 rounded-lg md:col-span-2">
+        Create Company
+      </button>
+    </form>
+    
+
+    <p id="companyMessage" class="mt-4 text-sm"></p>
+  </div>
+
+  <div class="bg-white p-6 rounded-lg shadow">
+    <div class="flex justify-between mb-4">
+      <h2 class="text-2xl font-bold">All Training Requests</h2>
+      <button onclick="loadAdminTraining()" class="bg-green-600 text-white px-4 py-2 rounded-lg">Refresh</button>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full border-collapse">
+        <thead>
+          <tr class="bg-gray-200 text-left">
+            <th class="p-3 border">ID</th>
+            <th class="p-3 border">Student</th>
+            <th class="p-3 border">Company</th>
+            <th class="p-3 border">Designation</th>
+            <th class="p-3 border">Supervisor</th>
+            <th class="p-3 border">Status</th>
+            <th class="p-3 border">Assign</th>
+            <th class="p-3 border">Update</th>
+          </tr>
+        </thead>
+
+        <tbody id="trainingTableBody">
+          <tr>
+            <td colspan="8" class="p-4 text-center text-gray-500">Loading...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</main>
+
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/admin-training.js"></script>
+</body>
+</html>
