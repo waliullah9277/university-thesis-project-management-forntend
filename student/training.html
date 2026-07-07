@@ -5,36 +5,54 @@
     <title>Industrial Training</title>
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   </head>
-  <body class="bg-gray-100 min-h-screen">
-    <nav class="bg-white shadow px-6 py-4 flex justify-between items-center">
+
+  <body class="bg-gray-100 min-h-screen flex flex-col">
+    <nav class="bg-slate-800 text-white shadow-lg px-6 py-4 flex justify-between items-center">
       <h1 class="text-xl font-bold">Industrial Training</h1>
 
-      <div class="flex gap-3">
+      <div class="flex items-center gap-3">
         <a
           href="dashboard.html"
-          class="bg-gray-600 text-white px-4 py-2 rounded-lg"
-          >Dashboard</a
+          class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 font-medium"
         >
+          Dashboard
+        </a>
+
         <button
           onclick="logoutUser()"
-          class="bg-red-600 text-white px-4 py-2 rounded-lg"
+          class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 font-medium"
         >
           Logout
         </button>
       </div>
     </nav>
 
-    <main class="p-6">
-      <div class="bg-white p-6 rounded-lg shadow mb-6">
-        <h2 class="text-2xl font-bold mb-4">Submit Training Information</h2>
+    <main class="p-6 flex-1">
+      <div class="mb-6">
+        <h2 class="text-3xl font-bold text-gray-800">Industrial Training</h2>
+        <p class="text-gray-500 mt-1">
+          Submit your training information and view supervisor feedbacks.
+        </p>
+      </div>
+
+      <!-- Submit Training -->
+      <section class="bg-white shadow-md border p-6 mb-6">
+        <div class="mb-5">
+          <h2 class="text-xl font-bold text-gray-800">
+            Submit Training Information
+          </h2>
+          <p class="text-gray-500 text-sm">
+            Add your company, designation, training duration and description.
+          </p>
+        </div>
 
         <form id="trainingForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div class="md:col-span-2">
             <label class="block mb-1 text-sm font-medium">Training Title</label>
             <input
               id="title"
-              class="w-full border px-4 py-2 rounded-lg"
-              placeholder="Industrial Training at Brain Station 23"
+              class="w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Industrial Training at software development"
               required
             />
           </div>
@@ -43,7 +61,7 @@
             <label class="block mb-1 text-sm font-medium">Company</label>
             <select
               id="company"
-              class="w-full border px-4 py-2 rounded-lg"
+              class="w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             >
               <option value="">Loading companies...</option>
@@ -54,7 +72,7 @@
             <label class="block mb-1 text-sm font-medium">Designation</label>
             <input
               id="designation"
-              class="w-full border px-4 py-2 rounded-lg"
+              class="w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Intern"
               required
             />
@@ -65,7 +83,7 @@
             <input
               type="date"
               id="start_date"
-              class="w-full border px-4 py-2 rounded-lg"
+              class="w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
@@ -75,7 +93,7 @@
             <input
               type="date"
               id="end_date"
-              class="w-full border px-4 py-2 rounded-lg"
+              class="w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
           </div>
@@ -85,35 +103,55 @@
             <textarea
               id="description"
               rows="4"
-              class="w-full border px-4 py-2 rounded-lg"
+              placeholder="Write your training details..."
+              class="w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             ></textarea>
           </div>
 
           <div class="md:col-span-2">
-            <button class="bg-blue-600 text-white px-6 py-2 rounded-lg">
+            <button
+              class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 font-medium shadow"
+            >
               Submit Training
             </button>
           </div>
         </form>
 
         <p id="message" class="mt-4 text-sm"></p>
-      </div>
+      </section>
 
-      <div class="bg-white p-6 rounded-lg shadow">
-        <h2 class="text-2xl font-bold mb-4">My Training</h2>
-        <div id="trainingList" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          <p class="text-gray-500">Loading...</p>
+      <!-- Training List -->
+      <section class="bg-white shadow-md border p-6">
+        <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-3 mb-5">
+          <div>
+            <h2 class="text-xl font-bold text-gray-800">My Training</h2>
+            <p class="text-gray-500 text-sm">
+              View your submitted training records and feedbacks.
+            </p>
+          </div>
+
+          <button
+            onclick="loadTraining()"
+            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 font-medium"
+          >
+            Refresh
+          </button>
         </div>
-      </div>
 
+        <div id="trainingList" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <p class="text-gray-500">Loading training information...</p>
+        </div>
+      </section>
+
+      <!-- Feedback Modal -->
       <div
         id="feedbackModal"
         class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4"
       >
-        <div class="bg-white w-full max-w-lg rounded-lg shadow-lg p-6">
+        <div class="bg-white w-full max-w-lg shadow-lg p-6">
           <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-bold">Training Feedbacks</h2>
+            <h2 class="text-xl font-bold text-gray-800">Training Feedbacks</h2>
 
             <button
               onclick="closeFeedbackModal()"
@@ -130,8 +168,14 @@
       </div>
     </main>
 
+    <footer class="bg-slate-800 border-t py-4 text-center text-sm text-white">
+      © 2026 University Project and Thesis Management System. All rights
+      reserved.
+    </footer>
+
     <script src="../assets/js/api.js"></script>
     <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/ui.js"></script>
     <script src="../assets/js/student-training.js"></script>
   </body>
 </html>

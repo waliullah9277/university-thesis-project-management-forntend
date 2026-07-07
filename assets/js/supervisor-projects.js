@@ -10,9 +10,10 @@ const feedbackModal = document.getElementById("feedbackModal");
 const feedbackForm = document.getElementById("feedbackForm");
 const feedbackMessage = document.getElementById("feedbackMessage");
 const feedbackList = document.getElementById("feedbackList");
+const supervisorProjectSearchInput = document.getElementById("supervisorProjectSearchInput");
 
+let allSupervisorProjects = [];
 
-// Load assigned projects
 async function loadAssignedProjects() {
   projectList.innerHTML = `<p class="text-gray-500">Loading projects...</p>`;
 
@@ -27,14 +28,15 @@ async function loadAssignedProjects() {
     return;
   }
 
-  let projects = [];
+  let projects = Array.isArray(data)
+    ? data
+    : data.data || data.projects || data.results || [];
 
-  if (Array.isArray(data)) {
-    projects = data;
-  } else {
-    projects = data.data || data.projects || [];
-  }
+  allSupervisorProjects = projects;
+  renderSupervisorProjects(allSupervisorProjects);
+}
 
+function renderSupervisorProjects(projects) {
   if (projects.length === 0) {
     projectList.innerHTML = `
       <p class="text-gray-500">No assigned project found.</p>
@@ -77,8 +79,27 @@ async function loadAssignedProjects() {
   });
 }
 
+if (supervisorProjectSearchInput) {
+  supervisorProjectSearchInput.addEventListener("input", function() {
+    const keyword = supervisorProjectSearchInput.value.toLowerCase();
 
-// Open feedback modal
+    const filteredProjects = allSupervisorProjects.filter(function(project) {
+      const text = `
+        ${project.title || ""}
+        ${project.project_type || ""}
+        ${project.description || ""}
+        ${project.technology_stack || ""}
+        ${project.status || ""}
+        ${getTeamName(project)}
+      `.toLowerCase();
+
+      return text.includes(keyword);
+    });
+
+    renderSupervisorProjects(filteredProjects);
+  });
+}
+
 function openFeedbackModal(projectId) {
   document.getElementById("feedback_project_id").value = projectId;
   document.getElementById("comment").value = "";
@@ -90,15 +111,11 @@ function openFeedbackModal(projectId) {
   loadFeedbacks(projectId);
 }
 
-
-// Close feedback modal
 function closeFeedbackModal() {
   feedbackModal.classList.add("hidden");
   feedbackModal.classList.remove("flex");
 }
 
-
-// Submit feedback
 feedbackForm.addEventListener("submit", async function(event) {
   event.preventDefault();
 
@@ -114,20 +131,18 @@ feedbackForm.addEventListener("submit", async function(event) {
 
   console.log("Feedback Submit:", data);
 
-  if (data.success || data.id) {
+  if (data.success || data.id || data.data?.id) {
     feedbackMessage.textContent = "Feedback submitted successfully.";
     feedbackMessage.className = "mt-4 text-sm text-green-600";
 
     document.getElementById("comment").value = "";
     loadFeedbacks(projectId);
   } else {
-    feedbackMessage.textContent = data.message || "Feedback submit failed.";
+    feedbackMessage.textContent = data.message || data.detail || "Feedback submit failed.";
     feedbackMessage.className = "mt-4 text-sm text-red-600";
   }
 });
 
-
-// Load feedbacks
 async function loadFeedbacks(projectId) {
   feedbackList.innerHTML = `<p class="text-gray-500">Loading feedbacks...</p>`;
 
@@ -142,13 +157,9 @@ async function loadFeedbacks(projectId) {
     return;
   }
 
-  let feedbacks = [];
-
-  if (Array.isArray(data)) {
-    feedbacks = data;
-  } else {
-    feedbacks = data.data || data.feedbacks || [];
-  }
+  let feedbacks = Array.isArray(data)
+    ? data
+    : data.data || data.feedbacks || data.results || [];
 
   if (feedbacks.length === 0) {
     feedbackList.innerHTML = `
@@ -171,26 +182,13 @@ async function loadFeedbacks(projectId) {
   });
 }
 
-
-// Team name safely
 function getTeamName(project) {
-  if (project.team_name) {
-    return project.team_name;
-  }
-
-  if (project.team && project.team.name) {
-    return project.team.name;
-  }
-
-  if (project.team) {
-    return `Team ID: ${project.team}`;
-  }
-
+  if (project.team_name) return project.team_name;
+  if (project.team && project.team.name) return project.team.name;
+  if (project.team) return `Team ID: ${project.team}`;
   return "-";
 }
 
-
-// Status badge
 function getStatusBadge(status) {
   if (status === "APPROVED") {
     return `<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">Approved</span>`;
@@ -200,11 +198,13 @@ function getStatusBadge(status) {
     return `<span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-semibold">Rejected</span>`;
   }
 
+  if (status === "IN_PROGRESS") {
+    return `<span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold">In Progress</span>`;
+  }
+
   return `<span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm font-semibold">Pending</span>`;
 }
 
-
-// Date format
 function formatDate(dateString) {
   const date = new Date(dateString);
 
@@ -217,14 +217,10 @@ function formatDate(dateString) {
   });
 }
 
-
-// Close modal when clicking outside box
 feedbackModal.addEventListener("click", function(event) {
   if (event.target === feedbackModal) {
     closeFeedbackModal();
   }
 });
 
-
-// Initial load
 loadAssignedProjects();

@@ -1,92 +1,106 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Project Management</title>
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Project Management</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
 
-<body class="bg-gray-100 min-h-screen">
+  <body class="bg-gray-100 min-h-screen flex flex-col">
+    <nav class="bg-slate-800 text-white shadow-lg px-6 py-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold">Project Management</h1>
 
-  <!-- Navbar -->
-  <nav class="bg-white shadow px-6 py-4 flex justify-between items-center">
-    <h1 class="text-xl font-bold text-gray-800">Project Management</h1>
+      <div class="flex items-center gap-3">
+        <a href="dashboard.html" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 font-medium">
+          Dashboard
+        </a>
 
-    <div class="flex items-center gap-3">
-      <a
-        href="dashboard.html"
-        class="bg-gray-600 hover:bg-gray-700 text-white px-4 py-2 rounded-lg font-medium"
-      >
-        Dashboard
-      </a>
-
-      <a
-        href="users.html"
-        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium"
-      >
-        Manage Users
-      </a>
-
-      <button 
-        onclick="logoutUser()"
-        class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium"
-      >
-        Logout
-      </button>
-    </div>
-  </nav>
-
-
-  <main class="p-6">
-
-    <div class="bg-white p-6 rounded-lg shadow">
-      <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4">
-        <div>
-          <h2 class="text-2xl font-bold">All Submitted Projects</h2>
-          <p class="text-gray-500">Assign supervisor and update project status</p>
-        </div>
-
-        <button 
-          onclick="loadProjects()"
-          class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg"
-        >
-          Refresh
+        <button onclick="logoutUser()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 font-medium">
+          Logout
         </button>
       </div>
+    </nav>
 
-      <div class="overflow-x-auto">
-        <table class="w-full border-collapse">
-          <thead>
-            <tr class="bg-gray-200 text-left">
-              <th class="p-3 border">ID</th>
-              <th class="p-3 border">Title</th>
-              <th class="p-3 border">Type</th>
-              <th class="p-3 border">Team</th>
-              <th class="p-3 border">Technology</th>
-              <th class="p-3 border">Supervisor</th>
-              <th class="p-3 border">Status</th>
-              <th class="p-3 border">Assign Supervisor</th>
-              <th class="p-3 border">Update Status</th>
-            </tr>
-          </thead>
-
-          <tbody id="projectTableBody">
-            <tr>
-              <td colspan="9" class="p-4 text-center text-gray-500">
-                Loading projects...
-              </td>
-            </tr>
-          </tbody>
-        </table>
+    <main class="p-6 flex-1">
+      <div class="mb-6">
+        <h2 class="text-3xl font-bold text-gray-800">Manage Projects</h2>
+        <p class="text-gray-500 mt-1">
+          View submitted projects, assign supervisors and update project status.
+        </p>
       </div>
-    </div>
 
-  </main>
+      <section class="bg-white shadow-md border p-6 mb-6">
+        <div class="mb-3">
+          <h2 class="text-xl font-bold text-gray-800">Search Projects</h2>
+          <p class="text-gray-500 text-sm">
+            Search by title, type, team, technology, supervisor or status.
+          </p>
+        </div>
 
+        <input
+          type="text"
+          id="projectSearchInput"
+          placeholder="Search projects..."
+          class="w-full border px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </section>
 
-  <script src="../assets/js/api.js"></script>
-  <script src="../assets/js/auth.js"></script>
-  <script src="../assets/js/admin-projects.js"></script>
+      <section class="bg-white shadow-md border p-6">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-5">
+          <div>
+            <h2 class="text-xl font-bold text-gray-800">All Submitted Projects</h2>
+            <p class="text-gray-500 text-sm">
+              Assign supervisor and update project status.
+            </p>
+          </div>
 
-</body>
+          <button
+            onclick="loadProjects()"
+            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 font-medium"
+          >
+            Refresh
+          </button>
+        </div>
+
+        <div class="overflow-x-auto border">
+          <table class="w-full border-collapse">
+            <thead>
+              <tr class="bg-slate-800 text-white text-left">
+                <th class="p-3 border border-slate-700">ID</th>
+                <th class="p-3 border border-slate-700">Title</th>
+                <th class="p-3 border border-slate-700">Type</th>
+                <th class="p-3 border border-slate-700">Team</th>
+                <th class="p-3 border border-slate-700">Technology</th>
+                <th class="p-3 border border-slate-700">Supervisor</th>
+                <th class="p-3 border border-slate-700">Status</th>
+                <th class="p-3 border border-slate-700">Assign Supervisor</th>
+                <th class="p-3 border border-slate-700">Update Status</th>
+              </tr>
+            </thead>
+
+            <tbody id="projectTableBody">
+              <tr>
+                <td colspan="9" class="p-4 text-center text-gray-500">
+                  Loading projects...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div id="projectPagination"></div>
+      </section>
+    </main>
+
+    <footer class="bg-slate-800 border-t py-4 text-center text-sm text-white">
+      © 2026 University Project and Thesis Management System. All rights
+      reserved.
+    </footer>
+
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/pagination.js"></script>
+    <script src="../assets/js/ui.js"></script>
+    <script src="../assets/js/admin-projects.js"></script>
+  </body>
 </html>

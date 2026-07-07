@@ -6,64 +6,229 @@
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
   </head>
 
-  <body class="bg-gray-100 min-h-screen">
-    <nav class="bg-white shadow px-6 py-4 flex justify-between items-center">
-      <h1 class="text-xl font-bold text-gray-800">Supervisor Dashboard</h1>
+  <body class="bg-gray-100 min-h-screen flex flex-col">
+    <nav class="bg-slate-800 text-white shadow-lg px-6 py-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold">Supervisor Dashboard</h1>
 
       <div class="flex items-center gap-3">
-        <a
-          href="projects.html"
-          class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium"
-        >
-          Assigned Projects
-        </a>
+        <a href="profile.html" class="flex items-center gap-2">
+          <img
+            id="navProfileImage"
+            src="https://ui-avatars.com/api/?name=Supervisor&background=0D8ABC&color=fff"
+            class="w-10 h-10 object-cover border border-slate-600"
+            alt="Profile"
+          />
 
-        <a
-          href="reports.html"
-          class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium"
-        >
-          Reports
-        </a>
-
-        <a
-          href="training.html"
-          class="bg-teal-600 hover:bg-teal-700 text-white px-4 py-2 rounded-lg font-medium"
-        >
-          Training
+          <span class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 font-medium">
+            Profile
+          </span>
         </a>
 
         <button
           onclick="logoutUser()"
-          class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium"
+          class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 font-medium"
         >
           Logout
         </button>
       </div>
     </nav>
 
-    <main class="p-6">
-      <h2 class="text-2xl font-bold mb-6">Welcome, Supervisor</h2>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="bg-white p-5 rounded-lg shadow">
-          <h3 class="text-gray-500">Assigned Projects</h3>
-          <p id="assignedProjects" class="text-3xl font-bold mt-2">0</p>
-        </div>
-
-        <div class="bg-white p-5 rounded-lg shadow">
-          <h3 class="text-gray-500">Pending Reports</h3>
-          <p id="pendingReports" class="text-3xl font-bold mt-2">0</p>
-        </div>
-
-        <div class="bg-white p-5 rounded-lg shadow">
-          <h3 class="text-gray-500">Reviewed Reports</h3>
-          <p id="reviewedReports" class="text-3xl font-bold mt-2">0</p>
-        </div>
+    <main class="p-6 flex-1">
+      <div class="mb-6">
+        <h2 class="text-3xl font-bold text-gray-800">Welcome, Supervisor</h2>
+        <p class="text-gray-500 mt-1">
+          Review assigned projects, reports, training and feedback activities.
+        </p>
       </div>
+
+      <!-- Supervisor Overview -->
+      <section class="bg-white shadow-md border p-6 mb-8">
+        <div class="mb-5">
+          <h2 class="text-xl font-bold text-gray-800">Supervisor Overview</h2>
+          <p class="text-gray-500 text-sm">
+            Quick summary of your assigned responsibilities.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div class="bg-gradient-to-r from-blue-600 to-blue-500 text-white p-6 shadow-lg">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-blue-100 uppercase text-sm font-semibold">
+                  Assigned Projects
+                </p>
+                <h3 id="assignedProjects" class="text-5xl font-bold mt-3">0</h3>
+                <p class="text-blue-100 text-sm mt-2">Projects under you</p>
+              </div>
+              <div class="text-6xl opacity-20">📁</div>
+            </div>
+          </div>
+
+          <div class="bg-gradient-to-r from-purple-600 to-purple-500 text-white p-6 shadow-lg">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-purple-100 uppercase text-sm font-semibold">
+                  Pending Reports
+                </p>
+                <h3 id="pendingReports" class="text-5xl font-bold mt-3">0</h3>
+                <p class="text-purple-100 text-sm mt-2">Need review</p>
+              </div>
+              <div class="text-6xl opacity-20">📝</div>
+            </div>
+          </div>
+
+          <div class="bg-gradient-to-r from-green-600 to-green-500 text-white p-6 shadow-lg">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-green-100 uppercase text-sm font-semibold">
+                  Reviewed Reports
+                </p>
+                <h3 id="reviewedReports" class="text-5xl font-bold mt-3">0</h3>
+                <p class="text-green-100 text-sm mt-2">Completed reviews</p>
+              </div>
+              <div class="text-6xl opacity-20">✅</div>
+            </div>
+          </div>
+
+          <div class="bg-gradient-to-r from-teal-600 to-cyan-500 text-white p-6 shadow-lg">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-teal-100 uppercase text-sm font-semibold">
+                  Training
+                </p>
+                <h3 id="assignedTraining" class="text-5xl font-bold mt-3">0</h3>
+                <p class="text-teal-100 text-sm mt-2">Assigned students</p>
+              </div>
+              <div class="text-6xl opacity-20">🏢</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quick Actions -->
+      <section class="bg-white shadow-md border p-6">
+        <div class="mb-5">
+          <h2 class="text-xl font-bold text-gray-800">Quick Actions</h2>
+          <p class="text-gray-500 text-sm">
+            Access your supervisor modules from here.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <a
+            href="projects.html"
+            class="bg-white p-6 shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-blue-600 block"
+          >
+            <div class="flex items-center gap-4">
+              <div class="w-14 h-14 bg-blue-100 text-blue-700 flex items-center justify-center text-2xl font-bold">
+                P
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-gray-800">Assigned Projects</h3>
+                <p class="text-gray-500 text-sm">View and give project feedback</p>
+              </div>
+            </div>
+          </a>
+
+          <a
+            href="reports.html"
+            class="bg-white p-6 shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-purple-600 block"
+          >
+            <div class="flex items-center gap-4">
+              <div class="w-14 h-14 bg-purple-100 text-purple-700 flex items-center justify-center text-2xl font-bold">
+                R
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-gray-800">Reports</h3>
+                <p class="text-gray-500 text-sm">Review progress reports</p>
+              </div>
+            </div>
+          </a>
+
+          <a
+            href="training.html"
+            class="bg-white p-6 shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-teal-600 block"
+          >
+            <div class="flex items-center gap-4">
+              <div class="w-14 h-14 bg-teal-100 text-teal-700 flex items-center justify-center text-2xl font-bold">
+                T
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-gray-800">Training</h3>
+                <p class="text-gray-500 text-sm">Review assigned training</p>
+              </div>
+            </div>
+          </a>
+
+          <a
+            href="notices.html"
+            class="bg-white p-6 shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-pink-600 block"
+          >
+            <div class="flex items-center gap-4">
+              <div class="w-14 h-14 bg-pink-100 text-pink-700 flex items-center justify-center text-2xl font-bold">
+                N
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-gray-800">Notices</h3>
+                <p class="text-gray-500 text-sm">View academic notices</p>
+              </div>
+            </div>
+          </a>
+
+          <a
+            href="notifications.html"
+            class="bg-white p-6 shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-cyan-600 block"
+          >
+            <div class="flex items-center gap-4">
+              <div class="w-14 h-14 bg-cyan-100 text-cyan-700 flex items-center justify-center text-2xl font-bold">
+                B
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-gray-800">Notifications</h3>
+                <p class="text-gray-500 text-sm">View system notifications</p>
+              </div>
+            </div>
+          </a>
+
+        </div>
+      </section>
     </main>
+
+    <footer class="bg-slate-800 border-t py-4 text-center text-sm text-white">
+      © 2026 University Project and Thesis Management System. All rights
+      reserved.
+    </footer>
 
     <script src="../assets/js/api.js"></script>
     <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/ui.js"></script>
     <script src="../assets/js/supervisor-dashboard.js"></script>
+
+    <script>
+      async function loadSupervisorProfileImage() {
+        const data = await apiRequest("/api/auth/profile/");
+        const user = data.data || data.user || data;
+
+        const fullName =
+          `${user.first_name || ""} ${user.last_name || ""}`.trim() ||
+          "Supervisor";
+
+        const uniqueUserId =
+          user.id || user.email || user.student_id || "supervisor";
+
+        const imageKey = `profile_image_${uniqueUserId}`;
+        const savedImage = localStorage.getItem(imageKey);
+
+        const navProfileImage = document.getElementById("navProfileImage");
+
+        if (savedImage) {
+          navProfileImage.src = savedImage;
+        } else {
+          navProfileImage.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=0D8ABC&color=fff`;
+        }
+      }
+
+      loadSupervisorProfileImage();
+    </script>
   </body>
 </html>

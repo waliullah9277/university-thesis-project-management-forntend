@@ -13,20 +13,18 @@ const teamSelect = document.getElementById("team");
 const feedbackModal = document.getElementById("feedbackModal");
 const feedbackList = document.getElementById("feedbackList");
 
+const studentProjectSearchInput = document.getElementById("studentProjectSearchInput");
 
-// Load teams into dropdown
+let allStudentProjects = [];
+let currentStudentProjectPage = 1;
+const studentProjectPerPage = 2;
+
 async function loadTeamsForDropdown() {
   const data = await apiRequest("/api/projects/teams/");
 
-  console.log("Teams:", data);
-
-  let teams = [];
-
-  if (Array.isArray(data)) {
-    teams = data;
-  } else {
-    teams = data.data || data.teams || [];
-  }
+  let teams = Array.isArray(data)
+    ? data
+    : data.data || data.teams || data.results || [];
 
   teamSelect.innerHTML = `<option value="">Select Team</option>`;
 
@@ -44,8 +42,6 @@ async function loadTeamsForDropdown() {
   });
 }
 
-
-// Project Submit
 projectForm.addEventListener("submit", async function(event) {
   event.preventDefault();
 
@@ -67,62 +63,77 @@ projectForm.addEventListener("submit", async function(event) {
     team: Number(team),
     title: title,
     project_type: projectType,
+    type: projectType,
     description: description,
     technology_stack: technologyStack,
   });
 
-  console.log("Submit Project:", data);
-
-  if (data.success || data.id) {
+  if (data.success || data.id || data.data?.id) {
     message.textContent = "Project submitted successfully.";
     message.className = "mt-4 text-sm text-green-600";
 
     projectForm.reset();
     loadProjects();
   } else {
-    message.textContent = data.message || "Project submit failed.";
+    if (data.team) {
+      message.textContent = data.team[0];
+    } else {
+      message.textContent = data.message || data.detail || JSON.stringify(data);
+    }
+
     message.className = "mt-4 text-sm text-red-600";
   }
 });
 
-
-// Load my projects
 async function loadProjects() {
+  projectList.innerHTML = `<p class="text-gray-500">Loading projects...</p>`;
+
   const data = await apiRequest("/api/projects/");
 
   console.log("Projects:", data);
 
   if (data.success === false) {
-    projectList.innerHTML = `
-      <p class="text-red-500">Failed to load projects.</p>
-    `;
+    projectList.innerHTML = `<p class="text-red-500">Failed to load projects.</p>`;
     return;
   }
 
-  let projects = [];
+  const projects = Array.isArray(data)
+    ? data
+    : data.data || data.projects || data.results || [];
 
-  if (Array.isArray(data)) {
-    projects = data;
-  } else {
-    projects = data.data || data.projects || [];
-  }
+  allStudentProjects = projects;
+  currentStudentProjectPage = 1;
+  renderStudentProjects(allStudentProjects);
+}
 
+function renderStudentProjects(projects) {
   if (projects.length === 0) {
-    projectList.innerHTML = `
-      <p class="text-gray-500">No project submitted yet.</p>
-    `;
+    projectList.innerHTML = `<p class="text-gray-500">No project found.</p>`;
+    renderPagination(
+      "studentProjectPagination",
+      0,
+      currentStudentProjectPage,
+      studentProjectPerPage,
+      "changeStudentProjectPage"
+    );
     return;
   }
+
+  const paginatedProjects = paginateItems(
+    projects,
+    currentStudentProjectPage,
+    studentProjectPerPage
+  );
 
   projectList.innerHTML = "";
 
-  projects.forEach(function(project) {
+  paginatedProjects.forEach(function(project) {
     projectList.innerHTML += `
       <div class="border rounded-lg p-5 bg-gray-50">
         <div class="flex justify-between items-start gap-3">
           <div>
-            <h3 class="text-lg font-bold">${project.title}</h3>
-            <p class="text-gray-500 text-sm mt-1">${project.project_type}</p>
+            <h3 class="text-lg font-bold">${project.title || "-"}</h3>
+            <p class="text-gray-500 text-sm mt-1">${project.project_type || "-"}</p>
           </div>
 
           ${getStatusBadge(project.status)}
@@ -147,10 +158,55 @@ async function loadProjects() {
       </div>
     `;
   });
+
+  renderPagination(
+    "studentProjectPagination",
+    projects.length,
+    currentStudentProjectPage,
+    studentProjectPerPage,
+    "changeStudentProjectPage"
+  );
 }
 
+function changeStudentProjectPage(page) {
+  currentStudentProjectPage = page;
 
-// Open feedback modal
+  const keyword = studentProjectSearchInput
+    ? studentProjectSearchInput.value.toLowerCase()
+    : "";
+
+  if (keyword) {
+    renderStudentProjects(getFilteredStudentProjects(keyword));
+  } else {
+    renderStudentProjects(allStudentProjects);
+  }
+}
+
+function getFilteredStudentProjects(keyword) {
+  return allStudentProjects.filter(function(project) {
+    const text = `
+      ${project.title || ""}
+      ${project.project_type || ""}
+      ${project.description || ""}
+      ${project.technology_stack || ""}
+      ${project.status || ""}
+      ${getTeamName(project)}
+      ${getSupervisorName(project)}
+    `.toLowerCase();
+
+    return text.includes(keyword);
+  });
+}
+
+if (studentProjectSearchInput) {
+  studentProjectSearchInput.addEventListener("input", function() {
+    const keyword = studentProjectSearchInput.value.toLowerCase();
+    currentStudentProjectPage = 1;
+
+    renderStudentProjects(getFilteredStudentProjects(keyword));
+  });
+}
+
 function openFeedbackModal(projectId) {
   feedbackModal.classList.remove("hidden");
   feedbackModal.classList.add("flex");
@@ -158,43 +214,27 @@ function openFeedbackModal(projectId) {
   loadFeedbacks(projectId);
 }
 
-
-// Close feedback modal
 function closeFeedbackModal() {
   feedbackModal.classList.add("hidden");
   feedbackModal.classList.remove("flex");
 }
 
-
-// Load project feedbacks
 async function loadFeedbacks(projectId) {
-  feedbackList.innerHTML = `
-    <p class="text-gray-500">Loading feedbacks...</p>
-  `;
+  feedbackList.innerHTML = `<p class="text-gray-500">Loading feedbacks...</p>`;
 
   const data = await apiRequest(`/api/projects/${projectId}/feedbacks/`);
 
-  console.log("Student Feedbacks:", data);
-
   if (data.success === false) {
-    feedbackList.innerHTML = `
-      <p class="text-red-500">Failed to load feedbacks.</p>
-    `;
+    feedbackList.innerHTML = `<p class="text-red-500">Failed to load feedbacks.</p>`;
     return;
   }
 
-  let feedbacks = [];
-
-  if (Array.isArray(data)) {
-    feedbacks = data;
-  } else {
-    feedbacks = data.data || data.feedbacks || [];
-  }
+  const feedbacks = Array.isArray(data)
+    ? data
+    : data.data || data.feedbacks || data.results || [];
 
   if (feedbacks.length === 0) {
-    feedbackList.innerHTML = `
-      <p class="text-gray-500">No feedback found for this project.</p>
-    `;
+    feedbackList.innerHTML = `<p class="text-gray-500">No feedback found for this project.</p>`;
     return;
   }
 
@@ -203,9 +243,7 @@ async function loadFeedbacks(projectId) {
   feedbacks.forEach(function(feedback) {
     feedbackList.innerHTML += `
       <div class="border rounded-lg p-4 bg-gray-50">
-        <p class="text-gray-700">
-          ${feedback.comment || "-"}
-        </p>
+        <p class="text-gray-700">${feedback.comment || "-"}</p>
 
         <div class="mt-3 text-xs text-gray-500">
           <p><strong>Supervisor:</strong> ${getFeedbackAuthor(feedback)}</p>
@@ -216,20 +254,10 @@ async function loadFeedbacks(projectId) {
   });
 }
 
-
-// Feedback author safely
 function getFeedbackAuthor(feedback) {
-  if (feedback.supervisor_name) {
-    return feedback.supervisor_name;
-  }
-
-  if (feedback.user_name) {
-    return feedback.user_name;
-  }
-
-  if (feedback.created_by_name) {
-    return feedback.created_by_name;
-  }
+  if (feedback.supervisor_name) return feedback.supervisor_name;
+  if (feedback.user_name) return feedback.user_name;
+  if (feedback.created_by_name) return feedback.created_by_name;
 
   if (feedback.supervisor && feedback.supervisor.first_name) {
     return `${feedback.supervisor.first_name} ${feedback.supervisor.last_name}`;
@@ -238,44 +266,25 @@ function getFeedbackAuthor(feedback) {
   return "Supervisor";
 }
 
-
-// Team name safely
 function getTeamName(project) {
-  if (project.team_name) {
-    return project.team_name;
-  }
-
-  if (project.team && project.team.name) {
-    return project.team.name;
-  }
-
-  if (project.team) {
-    return `Team ID: ${project.team}`;
-  }
-
+  if (project.team_name) return project.team_name;
+  if (project.team && project.team.name) return project.team.name;
+  if (project.team) return `Team ID: ${project.team}`;
   return "-";
 }
 
-
-// Supervisor name safely
 function getSupervisorName(project) {
-  if (project.supervisor_name) {
-    return project.supervisor_name;
-  }
+  if (project.supervisor_name) return project.supervisor_name;
 
   if (project.supervisor && project.supervisor.first_name) {
     return `${project.supervisor.first_name} ${project.supervisor.last_name}`;
   }
 
-  if (project.supervisor) {
-    return `Supervisor ID: ${project.supervisor}`;
-  }
+  if (project.supervisor) return `Supervisor ID: ${project.supervisor}`;
 
   return "Not Assigned";
 }
 
-
-// Status Badge
 function getStatusBadge(status) {
   if (status === "APPROVED") {
     return `<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">Approved</span>`;
@@ -285,11 +294,13 @@ function getStatusBadge(status) {
     return `<span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-semibold">Rejected</span>`;
   }
 
+  if (status === "IN_PROGRESS") {
+    return `<span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold">In Progress</span>`;
+  }
+
   return `<span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm font-semibold">Pending</span>`;
 }
 
-
-// Date format
 function formatDate(dateString) {
   const date = new Date(dateString);
 
@@ -302,15 +313,13 @@ function formatDate(dateString) {
   });
 }
 
+if (feedbackModal) {
+  feedbackModal.addEventListener("click", function(event) {
+    if (event.target === feedbackModal) {
+      closeFeedbackModal();
+    }
+  });
+}
 
-// Modal outside click close
-feedbackModal.addEventListener("click", function(event) {
-  if (event.target === feedbackModal) {
-    closeFeedbackModal();
-  }
-});
-
-
-// Initial load
 loadTeamsForDropdown();
 loadProjects();

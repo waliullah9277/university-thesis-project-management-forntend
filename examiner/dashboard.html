@@ -1,64 +1,207 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>Examiner Dashboard</title>
-  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-</head>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Examiner Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+  </head>
 
-<body class="bg-gray-100 min-h-screen">
+  <body class="bg-gray-100 min-h-screen flex flex-col">
+    <nav class="bg-slate-800 text-white shadow-lg px-6 py-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold">Examiner Dashboard</h1>
 
-  <nav class="bg-white shadow px-6 py-4 flex justify-between items-center">
-    <h1 class="text-xl font-bold text-gray-800">Examiner Dashboard</h1>
+      <div class="flex items-center gap-3">
+        <a href="profile.html" class="flex items-center gap-2">
+          <img
+            id="navProfileImage"
+            src="https://ui-avatars.com/api/?name=Examiner&background=0D8ABC&color=fff"
+            class="w-10 h-10 object-cover border border-slate-600"
+            alt="Profile"
+          />
 
-    <div class="flex items-center gap-3">
-      <a
-        href="viva.html"
-        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium"
-      >
-        Assigned Viva
-      </a>
+          <span class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 font-medium">
+            Profile
+          </span>
+        </a>
 
-      <a
-        href="evaluation.html"
-        class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg font-medium"
-      >
-        Evaluation
-      </a>
+        <button
+          onclick="logoutUser()"
+          class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 font-medium"
+        >
+          Logout
+        </button>
+      </div>
+    </nav>
 
-      <button
-        onclick="logoutUser()"
-        class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-medium"
-      >
-        Logout
-      </button>
-    </div>
-  </nav>
-
-  <main class="p-6">
-    <h2 class="text-2xl font-bold mb-6">Welcome, Examiner</h2>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <div class="bg-white p-5 rounded-lg shadow">
-        <h3 class="text-gray-500">Assigned Viva</h3>
-        <p id="assignedViva" class="text-3xl font-bold mt-2">0</p>
+    <main class="p-6 flex-1">
+      <div class="mb-6">
+        <h2 class="text-3xl font-bold text-gray-800">Welcome, Examiner</h2>
+        <p class="text-gray-500 mt-1">
+          View assigned viva schedules, complete evaluations and monitor your tasks.
+        </p>
       </div>
 
-      <div class="bg-white p-5 rounded-lg shadow">
-        <h3 class="text-gray-500">Completed Viva</h3>
-        <p id="completedViva" class="text-3xl font-bold mt-2">0</p>
-      </div>
+      <!-- Examiner Overview -->
+      <section class="bg-white shadow-md border p-6 mb-8">
+        <div class="mb-5">
+          <h2 class="text-xl font-bold text-gray-800">Examiner Overview</h2>
+          <p class="text-gray-500 text-sm">
+            Quick summary of your viva and evaluation activities.
+          </p>
+        </div>
 
-      <div class="bg-white p-5 rounded-lg shadow">
-        <h3 class="text-gray-500">Pending Viva</h3>
-        <p id="pendingViva" class="text-3xl font-bold mt-2">0</p>
-      </div>
-    </div>
-  </main>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div class="bg-gradient-to-r from-blue-600 to-blue-500 text-white p-6 shadow-lg">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-blue-100 uppercase text-sm font-semibold">
+                  Assigned Viva
+                </p>
+                <h3 id="assignedViva" class="text-5xl font-bold mt-3">0</h3>
+                <p class="text-blue-100 text-sm mt-2">Total assigned viva</p>
+              </div>
+              <div class="text-6xl opacity-20">🎓</div>
+            </div>
+          </div>
 
-  <script src="../assets/js/api.js"></script>
-  <script src="../assets/js/auth.js"></script>
-  <script src="../assets/js/examiner-dashboard.js"></script>
+          <div class="bg-gradient-to-r from-green-600 to-green-500 text-white p-6 shadow-lg">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-green-100 uppercase text-sm font-semibold">
+                  Completed Viva
+                </p>
+                <h3 id="completedViva" class="text-5xl font-bold mt-3">0</h3>
+                <p class="text-green-100 text-sm mt-2">Completed viva tasks</p>
+              </div>
+              <div class="text-6xl opacity-20">✅</div>
+            </div>
+          </div>
 
-</body>
+          <div class="bg-gradient-to-r from-orange-600 to-red-500 text-white p-6 shadow-lg">
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-orange-100 uppercase text-sm font-semibold">
+                  Pending Viva
+                </p>
+                <h3 id="pendingViva" class="text-5xl font-bold mt-3">0</h3>
+                <p class="text-orange-100 text-sm mt-2">Remaining viva tasks</p>
+              </div>
+              <div class="text-6xl opacity-20">⏳</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quick Actions -->
+      <section class="bg-white shadow-md border p-6">
+        <div class="mb-5">
+          <h2 class="text-xl font-bold text-gray-800">Quick Actions</h2>
+          <p class="text-gray-500 text-sm">
+            Access your examiner modules from here.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <a
+            href="viva.html"
+            class="bg-white p-6 shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-blue-600 block"
+          >
+            <div class="flex items-center gap-4">
+              <div class="w-14 h-14 bg-blue-100 text-blue-700 flex items-center justify-center text-2xl font-bold">
+                V
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-gray-800">Assigned Viva</h3>
+                <p class="text-gray-500 text-sm">View your assigned viva</p>
+              </div>
+            </div>
+          </a>
+
+          <a
+            href="evaluation.html"
+            class="bg-white p-6 shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-purple-600 block"
+          >
+            <div class="flex items-center gap-4">
+              <div class="w-14 h-14 bg-purple-100 text-purple-700 flex items-center justify-center text-2xl font-bold">
+                E
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-gray-800">Evaluation</h3>
+                <p class="text-gray-500 text-sm">Submit project evaluation</p>
+              </div>
+            </div>
+          </a>
+
+          <a
+            href="notices.html"
+            class="bg-white p-6 shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-pink-600 block"
+          >
+            <div class="flex items-center gap-4">
+              <div class="w-14 h-14 bg-pink-100 text-pink-700 flex items-center justify-center text-2xl font-bold">
+                N
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-gray-800">Notices</h3>
+                <p class="text-gray-500 text-sm">View academic notices</p>
+              </div>
+            </div>
+          </a>
+
+          <a
+            href="notifications.html"
+            class="bg-white p-6 shadow-lg hover:shadow-xl transition-all duration-300 border-l-4 border-cyan-600 block"
+          >
+            <div class="flex items-center gap-4">
+              <div class="w-14 h-14 bg-cyan-100 text-cyan-700 flex items-center justify-center text-2xl font-bold">
+                B
+              </div>
+              <div>
+                <h3 class="text-lg font-bold text-gray-800">Notifications</h3>
+                <p class="text-gray-500 text-sm">View system notifications</p>
+              </div>
+            </div>
+          </a>
+
+        
+        </div>
+      </section>
+    </main>
+
+    <footer class="bg-slate-800 border-t py-4 text-center text-sm text-white">
+      © 2026 University Project and Thesis Management System. All rights
+      reserved.
+    </footer>
+
+    <script src="../assets/js/api.js"></script>
+    <script src="../assets/js/auth.js"></script>
+    <script src="../assets/js/ui.js"></script>
+    <script src="../assets/js/examiner-dashboard.js"></script>
+
+    <script>
+      async function loadExaminerProfileImage() {
+        const data = await apiRequest("/api/auth/profile/");
+        const user = data.data || data.user || data;
+
+        const fullName =
+          `${user.first_name || ""} ${user.last_name || ""}`.trim() ||
+          "Examiner";
+
+        const uniqueUserId =
+          user.id || user.email || user.student_id || "examiner";
+
+        const imageKey = `profile_image_${uniqueUserId}`;
+        const savedImage = localStorage.getItem(imageKey);
+
+        const navProfileImage = document.getElementById("navProfileImage");
+
+        if (savedImage) {
+          navProfileImage.src = savedImage;
+        } else {
+          navProfileImage.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(fullName)}&background=0D8ABC&color=fff`;
+        }
+      }
+
+      loadExaminerProfileImage();
+    </script>
+  </body>
 </html>
