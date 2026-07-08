@@ -65,19 +65,16 @@ createUserForm.addEventListener("submit", async function (event) {
 
   console.log("Create User:", data);
 
-  if (data.success || data.id || data.data?.id) {
-    message.textContent = "User created successfully.";
-    message.className = "mt-4 text-sm text-green-600";
+  if (data.success === true || data.status === 201 || data.data?.id || data.id) {
+  message.textContent = "User created successfully.";
+  message.className = "mt-4 text-sm text-green-600";
 
-    createUserForm.reset();
-    studentIdBox.style.display = "none";
-    emailBox.style.display = "block";
-
-    loadUsers();
-  } else {
-    message.textContent = data.message || data.detail || JSON.stringify(data);
-    message.className = "mt-4 text-sm text-red-600";
-  }
+  createUserForm.reset();
+  loadUsers();
+} else {
+  message.textContent = data.message || data.detail || JSON.stringify(data);
+  message.className = "mt-4 text-sm text-red-600";
+}
 });
 
 async function loadUsers() {
