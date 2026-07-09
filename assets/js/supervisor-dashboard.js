@@ -18,13 +18,22 @@ async function loadSupervisorDashboard() {
   const dashboard = data.data || data;
 
   document.getElementById("assignedProjects").textContent =
-    dashboard.assigned_projects || dashboard.total_assigned_projects || 0;
+    dashboard.assigned_projects ?? dashboard.total_assigned_projects ?? 0;
 
   document.getElementById("pendingReports").textContent =
-    dashboard.pending_reports || dashboard.total_pending_reports || 0;
+    dashboard.pending_reports ?? dashboard.total_pending_reports ?? 0;
 
   document.getElementById("reviewedReports").textContent =
-    dashboard.reviewed_reports || dashboard.total_reviewed_reports || 0;
+    dashboard.reviewed_reports ?? dashboard.total_reviewed_reports ?? 0;
+
+  const assignedTrainingElement = document.getElementById("assignedTraining");
+
+  if (assignedTrainingElement) {
+    assignedTrainingElement.textContent =
+      dashboard.assigned_training ?? dashboard.training_count ?? 0;
+  } else {
+    console.error("assignedTraining element not found in dashboard.html");
+  }
 }
 
 loadSupervisorDashboard();

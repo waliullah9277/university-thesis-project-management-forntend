@@ -7,22 +7,15 @@
   </head>
 
   <body class="bg-gray-100 min-h-screen flex flex-col">
-    <!-- Navbar -->
     <nav class="bg-slate-800 text-white shadow-lg px-6 py-4 flex justify-between items-center">
       <h1 class="text-xl font-bold">User Management</h1>
 
       <div class="flex items-center gap-3">
-        <a
-          href="dashboard.html"
-          class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 font-medium"
-        >
+        <a href="dashboard.html" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 font-medium">
           Dashboard
         </a>
 
-        <button
-          onclick="logoutUser()"
-          class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 font-medium"
-        >
+        <button onclick="logoutUser()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 font-medium">
           Logout
         </button>
       </div>
@@ -32,103 +25,60 @@
       <div class="mb-6">
         <h2 class="text-3xl font-bold text-gray-800">Manage Users</h2>
         <p class="text-gray-500 mt-1">
-          Create students, supervisors, examiners and manage user access.
+          Create, update, activate, deactivate and delete users.
         </p>
       </div>
 
-      <!-- Create User Form -->
       <section class="bg-white shadow-md border p-6 mb-6">
         <div class="mb-5">
           <h2 class="text-xl font-bold text-gray-800">Create New User</h2>
-          <p class="text-gray-500 text-sm">
-            Fill in the required information to create a new account.
-          </p>
+          <p class="text-gray-500 text-sm">Fill in the form to create a new user.</p>
         </div>
 
         <form id="createUserForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <label class="block text-sm font-medium mb-1">Role</label>
-            <select
-              id="role"
-              class="w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            >
+            <select id="role" class="w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
               <option value="">Select Role</option>
               <option value="STUDENT">Student</option>
               <option value="SUPERVISOR">Supervisor</option>
               <option value="EXAMINER">Examiner</option>
+              <option value="SUPER_ADMIN">Super Admin</option>
             </select>
           </div>
 
           <div id="studentIdBox">
             <label class="block text-sm font-medium mb-1">Student ID</label>
-            <input
-              type="text"
-              id="student_id"
-              placeholder="Example: 221359277"
-              class="w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <input type="text" id="student_id" placeholder="Example: 221359277" class="w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
           </div>
 
           <div id="emailBox">
             <label class="block text-sm font-medium mb-1">Email</label>
-            <input
-              type="email"
-              id="email"
-              placeholder="example@gmail.com"
-              class="w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            />
+            <input type="email" id="email" placeholder="example@gmail.com" class="w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
           </div>
 
           <div>
             <label class="block text-sm font-medium mb-1">First Name</label>
-            <input
-              type="text"
-              id="first_name"
-              placeholder="First name"
-              class="w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
+            <input type="text" id="first_name" class="w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required />
           </div>
 
           <div>
             <label class="block text-sm font-medium mb-1">Last Name</label>
-            <input
-              type="text"
-              id="last_name"
-              placeholder="Last name"
-              class="w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
+            <input type="text" id="last_name" class="w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required />
           </div>
 
           <div>
             <label class="block text-sm font-medium mb-1">Phone</label>
-            <input
-              type="text"
-              id="phone"
-              placeholder="01700000000"
-              class="w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
+            <input type="text" id="phone" class="w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required />
           </div>
 
           <div>
             <label class="block text-sm font-medium mb-1">Password</label>
-            <input
-              type="password"
-              id="password"
-              placeholder="Welcome@123"
-              class="w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              required
-            />
+            <input type="password" id="password" class="w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required />
           </div>
 
           <div class="md:col-span-2">
-            <button
-              type="submit"
-              class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 font-medium shadow"
-            >
+            <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 font-medium shadow">
               Create User
             </button>
           </div>
@@ -137,13 +87,10 @@
         <p id="message" class="mt-4 text-sm"></p>
       </section>
 
-      <!-- Search -->
       <section class="bg-white shadow-md border p-6 mb-6">
         <div class="mb-3">
           <h2 class="text-xl font-bold text-gray-800">Search Users</h2>
-          <p class="text-gray-500 text-sm">
-            Search by name, email, student ID, phone, role or status.
-          </p>
+          <p class="text-gray-500 text-sm">Search by name, email, student ID, phone, role or status.</p>
         </div>
 
         <input
@@ -154,20 +101,14 @@
         />
       </section>
 
-      <!-- User List -->
       <section class="bg-white shadow-md border p-6">
         <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-3 mb-5">
           <div>
             <h2 class="text-xl font-bold text-gray-800">All Users</h2>
-            <p class="text-gray-500 text-sm">
-              View and manage all registered users.
-            </p>
+            <p class="text-gray-500 text-sm">View and manage all registered users.</p>
           </div>
 
-          <button
-            onclick="loadUsers()"
-            class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 font-medium"
-          >
+          <button onclick="loadUsers()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 font-medium">
             Refresh
           </button>
         </div>
@@ -196,8 +137,79 @@
           </table>
         </div>
 
-        <div id="userPagination"></div>
+        <div id="userPagination" class="mt-5"></div>
       </section>
+
+      <!-- Edit User Modal -->
+      <div
+        id="editUserModal"
+        class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50"
+      >
+        <div class="bg-white w-full max-w-2xl shadow-lg p-6">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-gray-800">Edit User</h2>
+
+            <button onclick="closeEditUserModal()" class="text-red-600 font-bold text-xl">
+              ✕
+            </button>
+          </div>
+
+          <form id="editUserForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <input type="hidden" id="edit_user_id" />
+
+            <div>
+              <label class="block text-sm font-medium mb-1">Role</label>
+              <select id="edit_role" class="w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                <option value="STUDENT">Student</option>
+                <option value="SUPERVISOR">Supervisor</option>
+                <option value="EXAMINER">Examiner</option>
+                <option value="SUPER_ADMIN">Super Admin</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-1">Student ID</label>
+              <input id="edit_student_id" class="w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-1">Email</label>
+              <input id="edit_email" type="email" class="w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-1">First Name</label>
+              <input id="edit_first_name" class="w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" required />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-1">Last Name</label>
+              <input id="edit_last_name" class="w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-1">Phone</label>
+              <input id="edit_phone" class="w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium mb-1">Status</label>
+              <select id="edit_is_active" class="w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500">
+                <option value="true">Active</option>
+                <option value="false">Inactive</option>
+              </select>
+            </div>
+
+            <div class="md:col-span-2">
+              <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 font-medium shadow">
+                Update User
+              </button>
+            </div>
+          </form>
+
+          <p id="editUserMessage" class="mt-4 text-sm"></p>
+        </div>
+      </div>
     </main>
 
     <footer class="bg-slate-800 border-t py-4 text-center text-sm text-white">

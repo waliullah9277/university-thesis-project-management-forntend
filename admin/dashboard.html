@@ -7,7 +7,9 @@
   </head>
 
   <body class="bg-gray-100 min-h-screen">
-    <nav class="bg-slate-800 shadow px-6 py-4 flex justify-between items-center">
+    <nav
+      class="bg-slate-800 shadow px-6 py-4 flex justify-between items-center"
+    >
       <h1 class="text-xl font-bold text-white">Super Admin Dashboard</h1>
 
       <div class="flex items-center gap-4">
@@ -98,6 +100,24 @@
               </div>
 
               <div class="text-6xl opacity-20">🎓</div>
+            </div>
+          </div>
+
+          <div
+            class="bg-gradient-to-r from-teal-600 to-cyan-500 text-white p-6 shadow-lg hover:shadow-xl transition-all duration-300"
+          >
+            <div class="flex justify-between items-start">
+              <div>
+                <p class="text-teal-100 uppercase text-sm font-semibold">
+                  Assigned Training
+                </p>
+                <h3 id="assignedTraining" class="text-5xl font-bold mt-3">0</h3>
+                <p class="text-teal-100 text-sm mt-2">
+                  Training assigned to supervisors
+                </p>
+              </div>
+
+              <div class="text-6xl opacity-20">🏢</div>
             </div>
           </div>
 
@@ -339,6 +359,9 @@
           dashboard.total_evaluations ??
           dashboard.evaluation_count ??
           0;
+
+        document.getElementById("assignedTraining").textContent =
+        dashboard.assigned_training ?? 0;
       }
 
       loadProfileImage();

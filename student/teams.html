@@ -8,121 +8,146 @@
 
 <body class="bg-gray-100 min-h-screen flex flex-col">
 
-  <!-- Navbar -->
-  <nav class="bg-slate-800 text-white shadow-lg px-6 py-4 flex justify-between items-center">
-    <h1 class="text-xl font-bold">Student Team</h1>
+<nav class="bg-slate-800 text-white shadow-lg px-6 py-4 flex justify-between items-center">
+  <h1 class="text-xl font-bold">Student Team</h1>
 
-    <div class="flex items-center gap-3">
-      <a
-        href="dashboard.html"
-        class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 font-medium"
-      >
-        Dashboard
-      </a>
+  <div class="flex items-center gap-3">
+    <a href="dashboard.html" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 font-medium">Dashboard</a>
+    <a href="projects.html" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 font-medium">Projects</a>
+    <button onclick="logoutUser()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 font-medium">Logout</button>
+  </div>
+</nav>
 
-      <button
-        onclick="logoutUser()"
-        class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 font-medium"
-      >
-        Logout
-      </button>
-    </div>
-  </nav>
+<main class="p-6 flex-1">
+  <div class="mb-6">
+    <h2 class="text-3xl font-bold text-gray-800">My Teams</h2>
+    <p class="text-gray-500 mt-1">Create, update, delete team and manage member information.</p>
+  </div>
 
-  <main class="p-6 flex-1">
+  <section class="bg-white shadow-md border p-6 mb-6">
+    <h2 class="text-xl font-bold text-gray-800 mb-4">Create Team</h2>
 
-    <div class="mb-6">
-      <h2 class="text-3xl font-bold text-gray-800">My Teams</h2>
-      <p class="text-gray-500 mt-1">
-        Create your project team and manage team information.
-      </p>
-    </div>
-
-    <!-- Create Team -->
-    <section class="bg-white shadow-md border p-6 mb-6">
-
-      <div class="mb-5">
-        <h2 class="text-xl font-bold text-gray-800">Create Team</h2>
-        <p class="text-gray-500 text-sm">
-          Create a new team for your university project or thesis.
-        </p>
+    <form id="teamForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div>
+        <label class="block text-sm font-medium mb-1">Team Name</label>
+        <input id="team_name" class="w-full border px-4 py-2" placeholder="Team Alpha" required />
       </div>
 
-      <form id="teamForm" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium mb-1">Number of Members</label>
+        <select id="member_count" class="w-full border px-4 py-2" required>
+          <option value="1">1 Member</option>
+          <option value="2">2 Members</option>
+          <option value="3">3 Members</option>
+        </select>
+      </div>
 
-        <div>
-          <label class="block text-sm font-medium mb-1">
-            Team Name
-          </label>
-
-          <input
-            type="text"
-            id="team_name"
-            placeholder="Example: Team Alpha"
-            class="w-full border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            required
-          />
-        </div>
-
-        <button
-          type="submit"
-          class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 font-medium shadow"
-        >
+      <div class="md:col-span-2">
+        <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 font-medium">
           Create Team
         </button>
+      </div>
+    </form>
 
-      </form>
+    <p id="message" class="mt-4 text-sm"></p>
+  </section>
 
-      <p id="message" class="mt-4 text-sm"></p>
+  <section class="bg-white shadow-md border p-6">
+    <div class="flex justify-between items-center mb-5">
+      <div>
+        <h2 class="text-xl font-bold text-gray-800">My Team List</h2>
+        <p class="text-gray-500 text-sm">Manage your teams and members.</p>
+      </div>
 
-    </section>
+      <button onclick="loadTeams()" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 font-medium">
+        Refresh
+      </button>
+    </div>
 
-    <!-- Team List -->
-    <section class="bg-white shadow-md border p-6">
+    <div id="teamList" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+      <p class="text-gray-500">Loading teams...</p>
+    </div>
+  </section>
 
-      <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-3 mb-5">
+  <!-- Edit Team Modal -->
+  <div id="teamEditModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
+    <div class="bg-white w-full max-w-lg p-6 shadow-lg">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold">Edit Team</h2>
+        <button onclick="closeTeamEditModal()" class="text-red-600 font-bold text-xl">✕</button>
+      </div>
 
+      <input type="hidden" id="edit_team_id" />
+
+      <div class="space-y-4">
         <div>
-          <h2 class="text-xl font-bold text-gray-800">
-            My Teams
-          </h2>
-
-          <p class="text-gray-500 text-sm">
-            View all your created teams.
-          </p>
+          <label class="block text-sm font-medium mb-1">Team Name</label>
+          <input id="edit_team_name" class="w-full border px-4 py-2" required />
         </div>
 
-        <button
-          onclick="loadTeams()"
-          class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 font-medium"
-        >
-          Refresh
+        <div>
+          <label class="block text-sm font-medium mb-1">Number of Members</label>
+          <select id="edit_member_count" class="w-full border px-4 py-2">
+            <option value="1">1 Member</option>
+            <option value="2">2 Members</option>
+            <option value="3">3 Members</option>
+          </select>
+        </div>
+
+        <button onclick="updateTeam()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 font-medium">
+          Update Team
         </button>
-
       </div>
 
-      <div
-        id="teamList"
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5"
-      >
-        <p class="text-gray-500">
-          Loading teams...
-        </p>
+      <p id="teamEditMessage" class="mt-4 text-sm"></p>
+    </div>
+  </div>
+
+  <!-- Add/Edit Member Modal -->
+  <div id="memberModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
+    <div class="bg-white w-full max-w-lg p-6 shadow-lg">
+      <div class="flex justify-between items-center mb-4">
+        <h2 id="memberModalTitle" class="text-xl font-bold">Add Member</h2>
+        <button onclick="closeMemberModal()" class="text-red-600 font-bold text-xl">✕</button>
       </div>
 
-    </section>
+      <input type="hidden" id="member_team_id" />
+      <input type="hidden" id="member_id" />
 
-  </main>
+      <div class="space-y-4">
+        <div>
+          <label class="block text-sm font-medium mb-1">Member Name</label>
+          <input id="member_name" class="w-full border px-4 py-2" placeholder="Member full name" required />
+        </div>
 
-  <footer class="bg-slate-800 border-t py-4 text-center text-sm text-white">
-    © 2026 University Project and Thesis Management System. All rights
-    reserved.
-  </footer>
+        <div>
+          <label class="block text-sm font-medium mb-1">Student ID</label>
+          <input id="member_student_id" class="w-full border px-4 py-2" placeholder="221359277" required />
+        </div>
 
-  <script src="../assets/js/api.js"></script>
-  <script src="../assets/js/auth.js"></script>
-  <script src="../assets/js/ui.js"></script>
-  <script src="../assets/js/student-teams.js"></script>
+        <div>
+          <label class="block text-sm font-medium mb-1">Phone</label>
+          <input id="member_phone" class="w-full border px-4 py-2" placeholder="01700000000" />
+        </div>
+
+        <button onclick="saveMember()" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 font-medium">
+          Save Member
+        </button>
+      </div>
+
+      <p id="memberMessage" class="mt-4 text-sm"></p>
+    </div>
+  </div>
+</main>
+
+<footer class="bg-slate-800 border-t py-4 text-center text-sm text-white">
+  © 2026 University Project and Thesis Management System. All rights reserved.
+</footer>
+
+<script src="../assets/js/api.js"></script>
+<script src="../assets/js/auth.js"></script>
+<script src="../assets/js/ui.js"></script>
+<script src="../assets/js/student-teams.js"></script>
 
 </body>
 </html>
