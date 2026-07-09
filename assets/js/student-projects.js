@@ -13,7 +13,9 @@ const teamSelect = document.getElementById("team");
 const feedbackModal = document.getElementById("feedbackModal");
 const feedbackList = document.getElementById("feedbackList");
 
-const studentProjectSearchInput = document.getElementById("studentProjectSearchInput");
+const studentProjectSearchInput = document.getElementById(
+  "studentProjectSearchInput"
+);
 
 let allStudentProjects = [];
 let currentStudentProjectPage = 1;
@@ -22,7 +24,7 @@ const studentProjectPerPage = 2;
 async function loadTeamsForDropdown() {
   const data = await apiRequest("/api/projects/teams/");
 
-  let teams = Array.isArray(data)
+  const teams = Array.isArray(data)
     ? data
     : data.data || data.teams || data.results || [];
 
@@ -33,7 +35,7 @@ async function loadTeamsForDropdown() {
     return;
   }
 
-  teams.forEach(function(team) {
+  teams.forEach(function (team) {
     teamSelect.innerHTML += `
       <option value="${team.id}">
         ${team.name}
@@ -42,7 +44,7 @@ async function loadTeamsForDropdown() {
   });
 }
 
-projectForm.addEventListener("submit", async function(event) {
+projectForm.addEventListener("submit", async function (event) {
   event.preventDefault();
 
   const team = document.getElementById("team").value;
@@ -75,12 +77,8 @@ projectForm.addEventListener("submit", async function(event) {
     projectForm.reset();
     loadProjects();
   } else {
-    if (data.team) {
-      message.textContent = data.team[0];
-    } else {
-      message.textContent = data.message || data.detail || JSON.stringify(data);
-    }
-
+    message.textContent =
+      data.team?.[0] || data.message || data.detail || "Project submit failed.";
     message.className = "mt-4 text-sm text-red-600";
   }
 });
@@ -90,10 +88,12 @@ async function loadProjects() {
 
   const data = await apiRequest("/api/projects/");
 
-  console.log("Projects:", data);
-
   if (data.success === false) {
-    projectList.innerHTML = `<p class="text-red-500">Failed to load projects.</p>`;
+    projectList.innerHTML = `
+      <div class="bg-red-50 border border-red-200 p-4 text-red-600">
+        ${data.message || "Failed to load projects."}
+      </div>
+    `;
     return;
   }
 
@@ -101,14 +101,19 @@ async function loadProjects() {
     ? data
     : data.data || data.projects || data.results || [];
 
-  allStudentProjects = projects;
+  allStudentProjects = projects.sort((a, b) => a.id - b.id);
   currentStudentProjectPage = 1;
   renderStudentProjects(allStudentProjects);
 }
 
 function renderStudentProjects(projects) {
   if (projects.length === 0) {
-    projectList.innerHTML = `<p class="text-gray-500">No project found.</p>`;
+    projectList.innerHTML = `
+      <div class="bg-yellow-50 border border-yellow-200 p-5 text-yellow-700">
+        No project found.
+      </div>
+    `;
+
     renderPagination(
       "studentProjectPagination",
       0,
@@ -127,36 +132,8 @@ function renderStudentProjects(projects) {
 
   projectList.innerHTML = "";
 
-  paginatedProjects.forEach(function(project) {
-    projectList.innerHTML += `
-      <div class="border rounded-lg p-5 bg-gray-50">
-        <div class="flex justify-between items-start gap-3">
-          <div>
-            <h3 class="text-lg font-bold">${project.title || "-"}</h3>
-            <p class="text-gray-500 text-sm mt-1">${project.project_type || "-"}</p>
-          </div>
-
-          ${getStatusBadge(project.status)}
-        </div>
-
-        <p class="mt-3 text-gray-700">
-          ${project.description || "-"}
-        </p>
-
-        <div class="mt-4 text-sm text-gray-600 space-y-1">
-          <p><strong>Technology:</strong> ${project.technology_stack || "-"}</p>
-          <p><strong>Team:</strong> ${getTeamName(project)}</p>
-          <p><strong>Supervisor:</strong> ${getSupervisorName(project)}</p>
-        </div>
-
-        <button
-          onclick="openFeedbackModal(${project.id})"
-          class="mt-4 bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg"
-        >
-          View Feedbacks
-        </button>
-      </div>
-    `;
+  paginatedProjects.forEach(function (project) {
+    projectList.innerHTML += getProjectCard(project);
   });
 
   renderPagination(
@@ -166,6 +143,63 @@ function renderStudentProjects(projects) {
     studentProjectPerPage,
     "changeStudentProjectPage"
   );
+}
+
+function getProjectCard(project) {
+  return `
+    <div class="bg-white border shadow-md p-6 hover:shadow-lg transition">
+      <div class="flex flex-col md:flex-row md:justify-between md:items-start gap-4 mb-5">
+        <div>
+          <h3 class="text-2xl font-bold text-gray-800">
+            ${project.title || "Untitled Project"}
+          </h3>
+
+          <div class="flex flex-wrap gap-2 mt-3">
+            ${getStatusBadge(project.status)}
+            <span class="bg-slate-100 text-slate-700 px-3 py-1 text-xs font-semibold">
+              ${project.project_type || "PROJECT"}
+            </span>
+          </div>
+        </div>
+
+        <button
+          onclick="openFeedbackModal(${project.id})"
+          class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 font-medium"
+        >
+          View Feedbacks
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5 text-sm">
+        <div class="bg-blue-50 border border-blue-100 p-4">
+          <p class="text-blue-700 font-semibold mb-1">Technology Stack</p>
+          <p class="text-gray-700">${project.technology_stack || "-"}</p>
+        </div>
+
+        <div class="bg-green-50 border border-green-100 p-4">
+          <p class="text-green-700 font-semibold mb-1">Supervisor Name</p>
+          <p class="text-gray-700">${getSupervisorName(project)}</p>
+        </div>
+
+        <div class="bg-purple-50 border border-purple-100 p-4">
+          <p class="text-purple-700 font-semibold mb-1">Team Name</p>
+          <p class="text-gray-700">${getTeamName(project)}</p>
+        </div>
+
+        <div class="bg-orange-50 border border-orange-100 p-4">
+          <p class="text-orange-700 font-semibold mb-1">Project Type</p>
+          <p class="text-gray-700">${project.project_type || "-"}</p>
+        </div>
+      </div>
+
+      <div class="bg-gray-50 border p-4">
+        <p class="font-semibold text-gray-800 mb-2">Project Description</p>
+        <p class="text-gray-700 leading-relaxed">
+          ${project.description || "No description added."}
+        </p>
+      </div>
+    </div>
+  `;
 }
 
 function changeStudentProjectPage(page) {
@@ -183,7 +217,7 @@ function changeStudentProjectPage(page) {
 }
 
 function getFilteredStudentProjects(keyword) {
-  return allStudentProjects.filter(function(project) {
+  return allStudentProjects.filter(function (project) {
     const text = `
       ${project.title || ""}
       ${project.project_type || ""}
@@ -199,18 +233,21 @@ function getFilteredStudentProjects(keyword) {
 }
 
 if (studentProjectSearchInput) {
-  studentProjectSearchInput.addEventListener("input", function() {
+  studentProjectSearchInput.addEventListener("input", function () {
     const keyword = studentProjectSearchInput.value.toLowerCase();
     currentStudentProjectPage = 1;
 
-    renderStudentProjects(getFilteredStudentProjects(keyword));
+    if (keyword) {
+      renderStudentProjects(getFilteredStudentProjects(keyword));
+    } else {
+      renderStudentProjects(allStudentProjects);
+    }
   });
 }
 
 function openFeedbackModal(projectId) {
   feedbackModal.classList.remove("hidden");
   feedbackModal.classList.add("flex");
-
   loadFeedbacks(projectId);
 }
 
@@ -240,9 +277,9 @@ async function loadFeedbacks(projectId) {
 
   feedbackList.innerHTML = "";
 
-  feedbacks.forEach(function(feedback) {
+  feedbacks.forEach(function (feedback) {
     feedbackList.innerHTML += `
-      <div class="border rounded-lg p-4 bg-gray-50">
+      <div class="border p-4 bg-gray-50">
         <p class="text-gray-700">${feedback.comment || "-"}</p>
 
         <div class="mt-3 text-xs text-gray-500">
@@ -266,39 +303,53 @@ function getFeedbackAuthor(feedback) {
   return "Supervisor";
 }
 
+
 function getTeamName(project) {
   if (project.team_name) return project.team_name;
-  if (project.team && project.team.name) return project.team.name;
-  if (project.team) return `Team ID: ${project.team}`;
-  return "-";
+
+  if (project.team && typeof project.team === "object") {
+    if (project.team.name) return project.team.name;
+    if (project.team.team_name) return project.team.team_name;
+  }
+
+  return "Team Not Found";
 }
 
 function getSupervisorName(project) {
   if (project.supervisor_name) return project.supervisor_name;
 
-  if (project.supervisor && project.supervisor.first_name) {
-    return `${project.supervisor.first_name} ${project.supervisor.last_name}`;
-  }
+  if (project.supervisor && typeof project.supervisor === "object") {
+    const fullName = `${project.supervisor.first_name || ""} ${
+      project.supervisor.last_name || ""
+    }`.trim();
 
-  if (project.supervisor) return `Supervisor ID: ${project.supervisor}`;
+    if (fullName) return fullName;
+    if (project.supervisor.email) return project.supervisor.email;
+  }
 
   return "Not Assigned";
 }
 
+
 function getStatusBadge(status) {
-  if (status === "APPROVED") {
-    return `<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">Approved</span>`;
-  }
+  if (status === "PENDING")
+    return `<span class="bg-yellow-100 text-yellow-700 px-3 py-1 text-xs font-semibold">Pending</span>`;
+  if (status === "SUPERVISOR_ASSIGNED")
+    return `<span class="bg-blue-100 text-blue-700 px-3 py-1 text-xs font-semibold">Supervisor Assigned</span>`;
+  if (status === "PROPOSAL_APPROVED")
+    return `<span class="bg-green-100 text-green-700 px-3 py-1 text-xs font-semibold">Proposal Approved</span>`;
+  if (status === "REVISION_REQUIRED")
+    return `<span class="bg-orange-100 text-orange-700 px-3 py-1 text-xs font-semibold">Revision Required</span>`;
+  if (status === "REJECTED")
+    return `<span class="bg-red-100 text-red-700 px-3 py-1 text-xs font-semibold">Rejected</span>`;
+  if (status === "IN_PROGRESS")
+    return `<span class="bg-purple-100 text-purple-700 px-3 py-1 text-xs font-semibold">In Progress</span>`;
+  if (status === "READY_FOR_VIVA")
+    return `<span class="bg-indigo-100 text-indigo-700 px-3 py-1 text-xs font-semibold">Ready For Viva</span>`;
+  if (status === "COMPLETED")
+    return `<span class="bg-slate-100 text-slate-700 px-3 py-1 text-xs font-semibold">Completed</span>`;
 
-  if (status === "REJECTED") {
-    return `<span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-semibold">Rejected</span>`;
-  }
-
-  if (status === "IN_PROGRESS") {
-    return `<span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold">In Progress</span>`;
-  }
-
-  return `<span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm font-semibold">Pending</span>`;
+  return `<span class="bg-gray-100 text-gray-700 px-3 py-1 text-xs font-semibold">Pending</span>`;
 }
 
 function formatDate(dateString) {
@@ -314,7 +365,7 @@ function formatDate(dateString) {
 }
 
 if (feedbackModal) {
-  feedbackModal.addEventListener("click", function(event) {
+  feedbackModal.addEventListener("click", function (event) {
     if (event.target === feedbackModal) {
       closeFeedbackModal();
     }

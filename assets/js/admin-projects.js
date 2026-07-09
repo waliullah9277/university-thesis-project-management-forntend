@@ -113,24 +113,7 @@ function renderProjects(projects) {
           </div>
         </td>
 
-        <td class="p-3 border">
-          <div class="flex gap-2">
-            <select id="status-${project.id}" class="border px-2 py-1 rounded w-36">
-              <option value="">Select</option>
-              <option value="PENDING" ${project.status === "PENDING" ? "selected" : ""}>Pending</option>
-              <option value="IN_PROGRESS" ${project.status === "IN_PROGRESS" ? "selected" : ""}>In Progress</option>
-              <option value="APPROVED" ${project.status === "APPROVED" ? "selected" : ""}>Approved</option>
-              <option value="REJECTED" ${project.status === "REJECTED" ? "selected" : ""}>Rejected</option>
-            </select>
-
-            <button
-              onclick="updateProjectStatus(${project.id})"
-              class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded"
-            >
-              Update
-            </button>
-          </div>
-        </td>
+        
       </tr>
     `;
   });
@@ -181,21 +164,36 @@ if (projectSearchInput) {
   });
 }
 
+
 function getTeamName(project) {
   if (project.team_name) return project.team_name;
-  if (project.team && project.team.name) return project.team.name;
-  if (project.team) return `Team ID: ${project.team}`;
-  return "-";
+
+  if (project.team && typeof project.team === "object") {
+    if (project.team.name) return project.team.name;
+    if (project.team.team_name) return project.team.team_name;
+  }
+
+  return `<span class="text-red-500">Team Not Found</span>`;
 }
+
 
 function getSupervisorName(project) {
   if (project.supervisor_name) return project.supervisor_name;
 
-  if (project.supervisor && project.supervisor.first_name) {
-    return `${project.supervisor.first_name} ${project.supervisor.last_name}`;
+  if (project.supervisor && typeof project.supervisor === "object") {
+    const fullName = `${project.supervisor.first_name || ""} ${project.supervisor.last_name || ""}`.trim();
+    if (fullName) return fullName;
+    if (project.supervisor.email) return project.supervisor.email;
   }
 
-  if (project.supervisor) return `Supervisor ID: ${project.supervisor}`;
+  const matchedSupervisor = supervisors.find(function (supervisor) {
+    return Number(supervisor.id) === Number(project.supervisor);
+  });
+
+  if (matchedSupervisor) {
+    const fullName = `${matchedSupervisor.first_name || ""} ${matchedSupervisor.last_name || ""}`.trim();
+    return fullName || matchedSupervisor.email || "Supervisor";
+  }
 
   return `<span class="text-red-500">Not Assigned</span>`;
 }
@@ -218,17 +216,14 @@ function getSupervisorOptions(currentSupervisorId) {
 }
 
 function getStatusBadge(status) {
-  if (status === "APPROVED") {
-    return `<span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">Approved</span>`;
-  }
-
-  if (status === "REJECTED") {
-    return `<span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-semibold">Rejected</span>`;
-  }
-
-  if (status === "IN_PROGRESS") {
-    return `<span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-semibold">In Progress</span>`;
-  }
+  if (status === "PENDING") return `<span class="bg-yellow-100 text-yellow-700 px-3 py-1 text-xs font-semibold">Pending</span>`;
+  if (status === "SUPERVISOR_ASSIGNED") return `<span class="bg-blue-100 text-blue-700 px-3 py-1 text-xs font-semibold">Supervisor Assigned</span>`;
+  if (status === "PROPOSAL_APPROVED") return `<span class="bg-green-100 text-green-700 px-3 py-1 text-xs font-semibold">Proposal Approved</span>`;
+  if (status === "REVISION_REQUIRED") return `<span class="bg-orange-100 text-orange-700 px-3 py-1 text-xs font-semibold">Revision Required</span>`;
+  if (status === "REJECTED") return `<span class="bg-red-100 text-red-700 px-3 py-1 text-xs font-semibold">Rejected</span>`;
+  if (status === "IN_PROGRESS") return `<span class="bg-purple-100 text-purple-700 px-3 py-1 text-xs font-semibold">In Progress</span>`;
+  if (status === "READY_FOR_VIVA") return `<span class="bg-indigo-100 text-indigo-700 px-3 py-1 text-xs font-semibold">Ready For Viva</span>`;
+  if (status === "COMPLETED") return `<span class="bg-slate-100 text-slate-700 px-3 py-1 text-xs font-semibold">Completed</span>`;
 
   return `<span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm font-semibold">Pending</span>`;
 }
